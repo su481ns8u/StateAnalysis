@@ -30,10 +30,10 @@ public class StateCensusAnalyzer {
             }
         } catch (NoSuchFileException e) {
             throw new CensusAnalyserException(e.getMessage(),
-                    CensusAnalyserException.ExceptionType.CENSUS_FILE_NOT_FOUND);
+                    CensusAnalyserException.ExceptionType.FILE_TYPE_INCORRECT);
         } catch (RuntimeException e) {
             throw new CensusAnalyserException(e.getMessage(),
-                    CensusAnalyserException.ExceptionType.INCORRECT_FILE_EXTENSION);
+                    CensusAnalyserException.ExceptionType.INCORRECT_FILE);
         } catch (IOException e) {
             e.printStackTrace();
         }
