@@ -2,7 +2,7 @@ package com.indianCensusAnalyser.exceptions;
 
 public class CensusAnalyserException extends Exception{
     public enum ExceptionType {
-        INCORRECT_FILE,FILE_TYPE_INCORRECT,DELIMITER_INCORRECT,HEADER_INCORRECT
+        INCORRECT_FILE,FILE_TYPE_INCORRECT,DELIMITER_INCORRECT
     }
 
     public ExceptionType type;
