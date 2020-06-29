@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="StateCodeAnalysisTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-06-29T23:22:27" hostname="DESKTOP-9DCLVAF" time="0.361">
+<testsuite name="StateCodeAnalysisTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-06-29T23:27:10" hostname="DESKTOP-9DCLVAF" time="0.397">
   <properties/>
-  <testcase name="givenIndianCensusCSVFileReturnCorrectRecords" classname="StateCodeAnalysisTest" time="0.361"/>
+  <testcase name="givenIndiaStateCodeData_WithWrongFile_ShouldThrowException" classname="StateCodeAnalysisTest" time="0.397"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

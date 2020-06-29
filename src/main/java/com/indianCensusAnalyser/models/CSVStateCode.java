@@ -1,6 +1,5 @@
 package com.indianCensusAnalyser.models;
 
-import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 
 public class CSVStateCode {
