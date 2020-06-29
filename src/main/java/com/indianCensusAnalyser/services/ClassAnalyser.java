@@ -1,6 +1,6 @@
 package com.indianCensusAnalyser.services;
 
-import com.indianCensusAnalyser.exceptions.CensusAnalyserException;
+import com.indianCensusAnalyser.exceptions.CSVAnalyserException;
 import com.indianCensusAnalyser.models.CSVStateCensus;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -12,8 +12,8 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Iterator;
 
-public class StateCensusAnalyzer {
-    public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
+public class ClassAnalyser {
+    public int loadIndiaCensusData(String csvFilePath) throws CSVAnalyserException {
         int namOfEateries = 0;
         try {
             Reader reader = null;
@@ -26,11 +26,11 @@ public class StateCensusAnalyzer {
                 CsvToBean<CSVStateCensus> csvToBean = csvToBeanBuilder.build();
                 censusCSVIterator = csvToBean.iterator();
             } catch (NoSuchFileException e) {
-                throw new CensusAnalyserException(e.getMessage(),
-                        CensusAnalyserException.ExceptionType.FILE_TYPE_INCORRECT);
+                throw new CSVAnalyserException(e.getMessage(),
+                        CSVAnalyserException.ExceptionType.FILE_TYPE_INCORRECT);
             } catch (RuntimeException e) {
-                throw new CensusAnalyserException(e.getMessage(),
-                        CensusAnalyserException.ExceptionType.INCORRECT_FILE);
+                throw new CSVAnalyserException(e.getMessage(),
+                        CSVAnalyserException.ExceptionType.INCORRECT_FILE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -39,11 +39,11 @@ public class StateCensusAnalyzer {
                 namOfEateries++;
                 CSVStateCensus censusData = censusCSVIterator.next();
             }
-        } catch (CensusAnalyserException e) {
+        } catch (CSVAnalyserException e) {
             throw e;
         }catch (RuntimeException e) {
-            throw new CensusAnalyserException(e.getMessage(),
-                    CensusAnalyserException.ExceptionType.DELIMITER_INCORRECT);
+            throw new CSVAnalyserException(e.getMessage(),
+                    CSVAnalyserException.ExceptionType.DELIMITER_INCORRECT);
         }
         return namOfEateries;
     }
