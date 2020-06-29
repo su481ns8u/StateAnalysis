@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="StateCodeAnalysisTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-06-29T23:30:21" hostname="DESKTOP-9DCLVAF" time="0.017">
+<testsuite name="StateCodeAnalysisTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-06-29T23:34:41" hostname="DESKTOP-9DCLVAF" time="0.265">
   <properties/>
-  <testcase name="givenIndiaCensusData_WithWrongFileExtension_ShouldThrowException" classname="StateCodeAnalysisTest" time="0.017"/>
+  <testcase name="givenIndiaStateCodeData_WithWrongDelimiter_ShouldThrowException" classname="StateCodeAnalysisTest" time="0.265"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
