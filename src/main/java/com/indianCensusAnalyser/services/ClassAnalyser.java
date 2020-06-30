@@ -34,18 +34,20 @@ public class ClassAnalyser {
 
         } catch (CSVAnalyserException e) {
             throw e;
-        } catch (RuntimeException e) {
-            throw new CSVAnalyserException
-                    ("File contains wrong delimiter", CSVAnalyserException.ExceptionType.DELIMITER_INCORRECT);
         }
         return numOfEntries;
     }
 
-    private int getCount (Iterator csvIterator){
+    private int getCount (Iterator csvIterator) throws CSVAnalyserException {
         int count = 0;
-        while (csvIterator.hasNext()) {
-            count++;
-            Object data = csvIterator.next();
+        try {
+            while (csvIterator.hasNext()) {
+                count++;
+                Object data = csvIterator.next();
+            }
+        } catch (RuntimeException e) {
+            throw new CSVAnalyserException
+                    ("File contains wrong delimiter", CSVAnalyserException.ExceptionType.DELIMITER_INCORRECT);
         }
         return count;
     }
