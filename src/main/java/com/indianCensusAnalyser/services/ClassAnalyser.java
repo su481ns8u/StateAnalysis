@@ -15,10 +15,11 @@ public class ClassAnalyser {
     public <E> int loadIndianStateData(String csvFilePath, Class<E> csvClass) throws CSVAnalyserException {
         int numOfEntries = 0;
         try {
+            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
             Iterator<E> csvIterator = null;
             try {
                 Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
-                csvIterator = new OpenCSVBuilder().csvFileIterator(reader, csvClass);
+                csvIterator = csvBuilder.csvFileIterator(reader, csvClass);
             } catch (NoSuchFileException e) {
                 throw new CSVAnalyserException
                         ("No such file exists",
