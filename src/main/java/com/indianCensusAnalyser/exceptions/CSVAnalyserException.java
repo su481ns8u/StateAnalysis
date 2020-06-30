@@ -1,8 +1,8 @@
 package com.indianCensusAnalyser.exceptions;
 
-public class CSVAnalyserException extends Exception{
+public class CSVAnalyserException extends Exception {
     public enum ExceptionType {
-        INCORRECT_FILE,FILE_TYPE_INCORRECT,DELIMITER_INCORRECT
+        INCORRECT_FILE_OR_HEADER, EXCEPTION_TYPE, DELIMITER_INCORRECT
     }
 
     public ExceptionType type;
@@ -11,10 +11,4 @@ public class CSVAnalyserException extends Exception{
         super(message);
         this.type = type;
     }
-
-    public CSVAnalyserException(String message, ExceptionType type, Throwable cause) {
-        super(message, cause);
-        this.type = type;
-    }
 }
-

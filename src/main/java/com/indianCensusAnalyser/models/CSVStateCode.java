@@ -1,18 +1,19 @@
 package com.indianCensusAnalyser.models;
 
+import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
 
 public class CSVStateCode {
-    @CsvBindByPosition(position = 0, required = true)
+    @CsvBindByName(column = "SrNo", required = true)
     public String srNo;
 
-    @CsvBindByPosition(position = 1, required = true)
+    @CsvBindByName(column = "State Name", required = true)
     public String stateName;
 
-    @CsvBindByPosition(position = 2, required = true)
+    @CsvBindByName(column = "TIN", required = true)
     public String tin;
 
-    @CsvBindByPosition(position = 3, required = true)
+    @CsvBindByName(column = "StateCode", required = true)
     public String stateCode;
 
     @Override
