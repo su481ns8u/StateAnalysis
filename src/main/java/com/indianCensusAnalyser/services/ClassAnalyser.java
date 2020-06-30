@@ -1,8 +1,6 @@
 package com.indianCensusAnalyser.services;
 
 import com.indianCensusAnalyser.exceptions.CSVAnalyserException;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -26,6 +24,8 @@ public class ClassAnalyser {
                                 CSVAnalyserException.ExceptionType.EXCEPTION_TYPE);
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (CSVBuilderException e) {
+                throw new CSVAnalyserException(e.getMessage(), e.type.name());
             }
             numOfEntries = this.getCount(csvIterator);
         } catch (CSVAnalyserException e) {
@@ -34,7 +34,7 @@ public class ClassAnalyser {
         return numOfEntries;
     }
 
-    private <E> int getCount (Iterator<E> csvIterator) throws CSVAnalyserException {
+    private <E> int getCount(Iterator<E> csvIterator) throws CSVAnalyserException {
         int count = 0;
         try {
             while (csvIterator.hasNext()) {

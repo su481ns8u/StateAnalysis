@@ -8,7 +8,7 @@ import java.io.Reader;
 import java.util.Iterator;
 
 public class OpenCSVBuilder<E> implements ICSVBuilder {
-    public Iterator<E> csvFileIterator(Reader reader, Class csvClass) throws CSVAnalyserException {
+    public Iterator<E> csvFileIterator(Reader reader, Class csvClass) throws CSVBuilderException {
         try {
             CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
             csvToBeanBuilder.withType(csvClass);
@@ -17,9 +17,9 @@ public class OpenCSVBuilder<E> implements ICSVBuilder {
             Iterator<E> csvIterator = csvToBean.iterator();
             return csvIterator;
         } catch (RuntimeException e) {
-            throw new CSVAnalyserException
+            throw new CSVBuilderException
                     ("File type is incorrect or incorrect header",
-                            CSVAnalyserException.ExceptionType.INCORRECT_FILE_OR_HEADER);
+                            CSVBuilderException.ExceptionType.INCORRECT_FILE_OR_HEADER);
         }
     }
 }
