@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.stream.StreamSupport;
 
 public class ClassAnalyser {
 //    public int loadIndianStateData(String csvFilePath, Object impClass) throws CSVAnalyserException {
@@ -50,7 +51,7 @@ public class ClassAnalyser {
 //    }
 
     public <E> int loadIndianStateData(String csvFilePath, Class<E> csvClass) throws CSVAnalyserException {
-        int namOfEateries = 0;
+        int numOfEntries = 0;
         try {
             Iterator<E> csvIterator = null;
             try {
@@ -65,7 +66,7 @@ public class ClassAnalyser {
             }
 
             while (csvIterator.hasNext()) {
-                namOfEateries++;
+                numOfEntries++;
                 Object data = csvIterator.next();
             }
 
@@ -75,14 +76,14 @@ public class ClassAnalyser {
             throw new CSVAnalyserException
                     ("File contains wrong delimiter", CSVAnalyserException.ExceptionType.DELIMITER_INCORRECT);
         }
-        return namOfEateries;
+        return numOfEntries;
     }
 
 
     private <E> Iterator<E> csvFileIterator(Reader reader, Class<E> csvClass) throws CSVAnalyserException {
         try {
             CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-            csvToBeanBuilder.withType((Class) csvClass);
+            csvToBeanBuilder.withType(csvClass);
             csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
             CsvToBean<E> csvToBean = csvToBeanBuilder.build();
             Iterator<E> csvIterator = csvToBean.iterator();
