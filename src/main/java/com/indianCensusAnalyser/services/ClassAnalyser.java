@@ -30,10 +30,7 @@ public class ClassAnalyser {
                 e.printStackTrace();
             }
 
-            while (csvIterator.hasNext()) {
-                numOfEntries++;
-                Object data = csvIterator.next();
-            }
+            numOfEntries = this.getCount(csvIterator);
 
         } catch (CSVAnalyserException e) {
             throw e;
@@ -44,6 +41,14 @@ public class ClassAnalyser {
         return numOfEntries;
     }
 
+    private int getCount (Iterator csvIterator){
+        int count = 0;
+        while (csvIterator.hasNext()) {
+            count++;
+            Object data = csvIterator.next();
+        }
+        return count;
+    }
 
     private <E> Iterator<E> csvFileIterator(Reader reader, Class<E> csvClass) throws CSVAnalyserException {
         try {
