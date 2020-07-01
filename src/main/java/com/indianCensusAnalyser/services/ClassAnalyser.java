@@ -1,6 +1,9 @@
 package com.indianCensusAnalyser.services;
 
 import com.indianCensusAnalyser.exceptions.CSVAnalyserException;
+import com.openCsvBuilder.services.ICSVBuilder;
+import com.openCsvBuilder.services.CSVBuilderFactory;
+import com.openCsvBuilder.exceptions.CSVBuilderException;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -10,11 +13,11 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 
 public class ClassAnalyser {
-    public <E> int loadIndianStateData(String csvFilePath, Class<E> csvClass) throws CSVAnalyserException {
+    public int loadIndianStateData(String csvFilePath, Class csvClass) throws CSVAnalyserException {
         int numOfEntries = 0;
         try {
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<E> csvIterator = null;
+            Iterator<Class> csvIterator = null;
             try {
                 Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
                 csvIterator = csvBuilder.csvFileIterator(reader, csvClass);
