@@ -3,6 +3,7 @@ package com.indianCensusAnalyser.services;
 import com.google.gson.Gson;
 import com.indianCensusAnalyser.exceptions.CSVAnalyserException;
 import com.indianCensusAnalyser.models.CSVStateCensus;
+import com.indianCensusAnalyser.models.CSVStateCode;
 import com.openCsvBuilder.exceptions.CSVBuilderException;
 import com.openCsvBuilder.services.CSVBuilderFactory;
 import com.openCsvBuilder.services.ICSVBuilder;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -56,16 +58,26 @@ public class ClassAnalyser {
         }
     }
 
-    public String getSortedCensusData(String stateCensusData, Comparator<CSVStateCensus> comparator) throws CSVAnalyserException {
+    public String getSortedStateCensusData(String stateCensusData, Comparator<CSVStateCensus> comparator)
+            throws CSVAnalyserException {
         this.loadIndianStateDataList(stateCensusData, CSVStateCensus.class);
-        this.isEmpty(csvList);
+        this.isEmpty();
         csvList.sort(comparator);
         String sortedJsonList = new Gson().toJson(csvList);
         return sortedJsonList;
     }
 
-    public void isEmpty(List csvList) throws CSVAnalyserException {
-        if (csvList.size() == 0){
+    public String getSortedStateCodeData(String stateCensusData, Comparator<CSVStateCode> comparator)
+            throws CSVAnalyserException {
+        this.loadIndianStateDataList(stateCensusData, CSVStateCode.class);
+        this.isEmpty();
+        csvList.sort(comparator);
+        String sortedJsonList = new Gson().toJson(csvList);
+        return sortedJsonList;
+    }
+
+    public void isEmpty() throws CSVAnalyserException {
+        if (csvList.size() == 0) {
             throw new CSVAnalyserException("No data exists!", CSVAnalyserException.ExceptionType.EMPTY_CSV);
         }
     }
