@@ -191,9 +191,22 @@ public class CensusAnalyserTest {
             String sortedStateData = classAnalyser.getSortedStateCensusDataReverse(INDIA_CENSUS_CSV_FILE_PATH,
                     Comparator.comparing(CSVStateCensus::getDensityPerSqKm));
             CSVStateCensus[] censusCsv = new Gson().fromJson(sortedStateData, CSVStateCensus[].class);
-            System.out.println(censusCsv[0] + " "+ censusCsv[censusCsv.length - 1]);
             Assert.assertTrue(censusCsv[0].densityPerSqKm == 1102 &&
                     censusCsv[censusCsv.length - 1].densityPerSqKm == 50);
+        } catch (CSVAnalyserException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenIndianCensusData_WhenSortedOnAreaDescending_ShouldReturnSortedResult() {
+        try {
+            ClassAnalyser classAnalyser = new ClassAnalyser();
+            String sortedStateData = classAnalyser.getSortedStateCensusDataReverse(INDIA_CENSUS_CSV_FILE_PATH,
+                    Comparator.comparing(CSVStateCensus::getAreaInSqKm));
+            CSVStateCensus[] censusCsv = new Gson().fromJson(sortedStateData, CSVStateCensus[].class);
+            Assert.assertTrue(censusCsv[0].areaInSqKm == 342239 &&
+                    censusCsv[censusCsv.length - 1].areaInSqKm == 3702);
         } catch (CSVAnalyserException e) {
             e.printStackTrace();
         }
