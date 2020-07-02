@@ -28,6 +28,10 @@ public class CSVStateCensus extends Object{
         return densityPerSqKm;
     }
 
+    public int getAreaInSqKm() {
+        return areaInSqKm;
+    }
+
     @Override
     public String toString() {
         return "IndiaCensusCSV{" +
