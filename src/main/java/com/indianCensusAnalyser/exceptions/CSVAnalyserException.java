@@ -7,7 +7,7 @@ public class CSVAnalyserException extends Exception {
     }
 
     public enum ExceptionType {
-        INCORRECT_FILE_OR_HEADER, EXCEPTION_TYPE, DELIMITER_INCORRECT
+        UNABLE_TO_PARSE, FILE_PROBLEM, CSV_FILE_INTERNAL_ISSUE, WRONG_HEADER_OR_UNABLE_TO_PARSE, WRONG_DELIMITER
     }
 
     public ExceptionType type;

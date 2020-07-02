@@ -27,7 +27,7 @@ public class CensusAnalyserTest {
         try {
             censusAnalyser.loadIndianStateData(INDIA_STATE_CSV_FILE_PATH, CSVStateCensus.class);
         } catch (CSVAnalyserException e) {
-            Assert.assertEquals(CSVAnalyserException.ExceptionType.INCORRECT_FILE_OR_HEADER, e.type);
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.WRONG_HEADER_OR_UNABLE_TO_PARSE, e.type);
         }
     }
 
@@ -39,19 +39,17 @@ public class CensusAnalyserTest {
         try {
             censusAnalyser.loadIndianStateData(WRONG_CSV_FILE_EXTENSION, CSVStateCensus.class);
         } catch (CSVAnalyserException e) {
-            Assert.assertEquals(CSVAnalyserException.ExceptionType.EXCEPTION_TYPE, e.type);
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.FILE_PROBLEM, e.type);
         }
     }
 
     @Test
     public void givenIndiaCensusData_WithWrongDelimiter_ShouldThrowException() {
-        ClassAnalyser censusAnalyser = new ClassAnalyser();
-        ExpectedException exceptionRule = ExpectedException.none();
-        exceptionRule.expect(CSVAnalyserException.class);
         try {
-            censusAnalyser.loadIndianStateData(CSV_WITH_WRONG_DELIMITER, CSVStateCensus.class);
+            ClassAnalyser censusAnalyser = new ClassAnalyser();
+            int numOfRecords = censusAnalyser.loadIndianStateData(CSV_WITH_WRONG_DELIMITER, CSVStateCensus.class);
         } catch (CSVAnalyserException e) {
-            Assert.assertEquals(CSVAnalyserException.ExceptionType.DELIMITER_INCORRECT, e.type);
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.WRONG_DELIMITER, e.type);
         }
     }
 
@@ -63,7 +61,52 @@ public class CensusAnalyserTest {
         try {
             censusAnalyser.loadIndianStateData(CSV_WITH_WRONG_HEADER, CSVStateCensus.class);
         } catch (CSVAnalyserException e) {
-            Assert.assertEquals(CSVAnalyserException.ExceptionType.INCORRECT_FILE_OR_HEADER, e.type);
+            System.out.println(e);
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.WRONG_HEADER_OR_UNABLE_TO_PARSE, e.type);
+        }
+    }
+
+    @Test
+    public void givenIndianCensusListCSVFileReturnCorrectRecords() throws CSVAnalyserException {
+        ClassAnalyser classAnalyser = new ClassAnalyser();
+        int numOfRecords = classAnalyser.loadIndianStateDataList(INDIA_CENSUS_CSV_FILE_PATH, CSVStateCensus.class);
+        Assert.assertEquals(29, numOfRecords);
+    }
+
+    @Test
+    public void givenIndiaCensusDataList_WithWrongFileExtension_ShouldThrowException() {
+        ClassAnalyser censusAnalyser = new ClassAnalyser();
+        ExpectedException exceptionRule = ExpectedException.none();
+        exceptionRule.expect(CSVAnalyserException.class);
+        try {
+            censusAnalyser.loadIndianStateDataList(WRONG_CSV_FILE_EXTENSION, CSVStateCensus.class);
+        } catch (CSVAnalyserException e) {
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.FILE_PROBLEM, e.type);
+        }
+    }
+
+    @Test
+    public void givenIndiaCensusDataList_WithWrongFile_ShouldThrowException() {
+        ClassAnalyser censusAnalyser = new ClassAnalyser();
+        ExpectedException exceptionRule = ExpectedException.none();
+        exceptionRule.expect(CSVAnalyserException.class);
+        try {
+            censusAnalyser.loadIndianStateDataList(INDIA_STATE_CSV_FILE_PATH, CSVStateCensus.class);
+        } catch (CSVAnalyserException e) {
+            System.out.println(e);
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.WRONG_HEADER_OR_UNABLE_TO_PARSE, e.type);
+        }
+    }
+
+    @Test
+    public void givenIndiaCensusDataList_WithWrongHeader_ShouldThrowException() {
+        ClassAnalyser censusAnalyser = new ClassAnalyser();
+        ExpectedException exceptionRule = ExpectedException.none();
+        exceptionRule.expect(CSVAnalyserException.class);
+        try {
+            censusAnalyser.loadIndianStateDataList(CSV_WITH_WRONG_HEADER, CSVStateCensus.class);
+        } catch (CSVAnalyserException e) {
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.WRONG_HEADER_OR_UNABLE_TO_PARSE, e.type);
         }
     }
 }

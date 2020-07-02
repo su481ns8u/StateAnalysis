@@ -27,7 +27,7 @@ public class StateCodeAnalysisTest {
         try {
             censusAnalyser.loadIndianStateData(INDIA_CENSUS_CSV_FILE_PATH, CSVStateCode.class);
         } catch (CSVAnalyserException e) {
-            Assert.assertEquals(CSVAnalyserException.ExceptionType.INCORRECT_FILE_OR_HEADER, e.type);
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.UNABLE_TO_PARSE, e.type);
         }
     }
 
@@ -39,7 +39,7 @@ public class StateCodeAnalysisTest {
         try {
             censusAnalyser.loadIndianStateData(WRONG_CSV_FILE_EXTENSION, CSVStateCode.class);
         } catch (CSVAnalyserException e) {
-            Assert.assertEquals(CSVAnalyserException.ExceptionType.EXCEPTION_TYPE, e.type);
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.FILE_PROBLEM, e.type);
         }
     }
 
@@ -51,7 +51,7 @@ public class StateCodeAnalysisTest {
         try {
             censusAnalyser.loadIndianStateData(CSV_WITH_WRONG_DELIMITER, CSVStateCode.class);
         } catch (CSVAnalyserException e) {
-            Assert.assertEquals(CSVAnalyserException.ExceptionType.DELIMITER_INCORRECT, e.type);
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.CSV_FILE_INTERNAL_ISSUE, e.type);
         }
     }
 
@@ -63,7 +63,7 @@ public class StateCodeAnalysisTest {
         try {
             censusAnalyser.loadIndianStateData(CSV_WITH_WRONG_HEADER, CSVStateCode.class);
         } catch (CSVAnalyserException e) {
-            Assert.assertEquals(CSVAnalyserException.ExceptionType.INCORRECT_FILE_OR_HEADER, e.type);
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.UNABLE_TO_PARSE, e.type);
         }
     }
 }
