@@ -76,6 +76,16 @@ public class ClassAnalyser {
         return sortedJsonList;
     }
 
+    public String getSortedStateCensusDataReverse(String stateCensusData, Comparator<CSVStateCensus> comparator)
+            throws CSVAnalyserException {
+        this.loadIndianStateDataList(stateCensusData, CSVStateCensus.class);
+        this.isEmpty();
+        csvList.sort(comparator);
+        Collections.reverse(csvList);
+        String sortedJsonList = new Gson().toJson(csvList);
+        return sortedJsonList;
+    }
+
     public void isEmpty() throws CSVAnalyserException {
         if (csvList.size() == 0) {
             throw new CSVAnalyserException("No data exists!", CSVAnalyserException.ExceptionType.EMPTY_CSV);

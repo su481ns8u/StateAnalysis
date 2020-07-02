@@ -20,6 +20,10 @@ public class CSVStateCensus extends Object{
         return state;
     }
 
+    public int getPopulation() {
+        return population;
+    }
+
     @Override
     public String toString() {
         return "IndiaCensusCSV{" +
