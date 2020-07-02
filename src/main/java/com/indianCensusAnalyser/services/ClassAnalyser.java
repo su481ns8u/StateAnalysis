@@ -32,11 +32,10 @@ public class ClassAnalyser {
         Iterable<E> iterable = () -> csvIterator;
         int namOfEateries = 0;
         try {
-            namOfEateries = (int) StreamSupport.stream(iterable.spliterator(), false).count();
-        } catch (RuntimeException e){
+            return (int) StreamSupport.stream(iterable.spliterator(), false).count();
+        } catch (RuntimeException e) {
             throw new CSVAnalyserException(e.getMessage(), CSVAnalyserException.ExceptionType.WRONG_DELIMITER);
         }
-        return namOfEateries;
     }
 
     public int loadIndianStateDataList(String csvFilePath, Class csvClass) throws CSVAnalyserException {
@@ -44,6 +43,7 @@ public class ClassAnalyser {
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
             Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
             List csvList = csvBuilder.csvFileList(reader, csvClass);
+            csvList.forEach(System.out::println);
             return csvList.size();
         } catch (IOException e) {
             throw new CSVAnalyserException(e.getMessage(),
