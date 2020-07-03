@@ -12,7 +12,8 @@ public class CSVAnalyserException extends Exception {
         FILE_PROBLEM,
         CSV_FILE_INTERNAL_ISSUE,
         WRONG_HEADER_OR_UNABLE_TO_PARSE,
-        WRONG_DELIMITER
+        WRONG_DELIMITER,
+        INVALID_PARAMETER
     }
 
     public ExceptionType type;
