@@ -110,7 +110,7 @@ public class CensusAnalyserTest {
         try {
             censusAnalyser.loadIndianStateDataList(WRONG_CSV_FILE_EXTENSION_FOR_STATE_CODE,"India State Code", IndiaStateCodeCSV.class);
         } catch (CSVAnalyserException e) {
-            Assert.assertEquals(CSVAnalyserException.ExceptionType.FILE_PROBLEM, e.type);
+            Assert.assertEquals(CSVAnalyserException.ExceptionType.WRONG_HEADER_OR_UNABLE_TO_PARSE, e.type);
         }
     }
 
@@ -308,5 +308,26 @@ public class CensusAnalyserTest {
         } catch (CSVAnalyserException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void givenUSAndIndiaCensusData_GivesMostPopulasStateFromBoth() throws CSVAnalyserException, IOException {
+        ClassAnalyser classAnalyser = new ClassAnalyser();
+        String temp = classAnalyser.getMostDenseState(INDIA_CENSUS_CSV_FILE_PATH, US_CENSUS_DATA_CSV_PATH);
+        Assert.assertEquals("{" +
+                "\"landArea\":158.12," +
+                "\"waterArea\":18.88," +
+                "\"populationDensity\":3805.61," +
+                "\"population\":601723.0," +
+                "\"areaInSqKm\":0," +
+                "\"densityPerSqKm\":0," +
+                "\"state\":\"District of Columbia\"," +
+                "\"stateId\":\"DC\"," +
+                "\"housingUnits\":296719.0," +
+                "\"totalArea\":177.0," +
+                "\"density\":0.0," +
+                "\"housingDensity" +
+                "\":1876.61}"
+                ,temp);
     }
 }
