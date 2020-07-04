@@ -1,6 +1,6 @@
 package com.indianCensusAnalyser.models;
 
-public class IndiaStateDAO {
+public class CensusDao {
     public double landArea;
     public double waterArea;
     public double populationDensity;
@@ -18,21 +18,21 @@ public class IndiaStateDAO {
     public double density;
     public double housingDensity;
 
-    public IndiaStateDAO(IndiaStateCensusCSV indiaStateCensusCSV) {
+    public CensusDao(IndiaStateCensusCSV indiaStateCensusCSV) {
         this.state = indiaStateCensusCSV.state;
         this.population = indiaStateCensusCSV.population;
         this.areaInSqKm = indiaStateCensusCSV.areaInSqKm;
         this.densityPerSqKm = indiaStateCensusCSV.densityPerSqKm;
     }
 
-    public IndiaStateDAO(IndiaStateCodeCSV indiaStateCodeCSV) {
+    public CensusDao(IndiaStateCodeCSV indiaStateCodeCSV) {
         this.stateCode = indiaStateCodeCSV.stateCode;
         this.srNo = indiaStateCodeCSV.srNo;
         this.stateName = indiaStateCodeCSV.stateName;
         this.tin = indiaStateCodeCSV.tin;
     }
 
-    public IndiaStateDAO(USCensusDataCSV usCensusDataCSV) {
+    public CensusDao(USCensusDataCSV usCensusDataCSV) {
         this.stateId = usCensusDataCSV.stateId;
         this.state = usCensusDataCSV.state;
         this.population = usCensusDataCSV.population;

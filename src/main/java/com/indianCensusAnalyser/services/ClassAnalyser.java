@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.indianCensusAnalyser.exceptions.CSVAnalyserException;
 import com.indianCensusAnalyser.models.IndiaStateCensusCSV;
 import com.indianCensusAnalyser.models.IndiaStateCodeCSV;
-import com.indianCensusAnalyser.models.IndiaStateDAO;
+import com.indianCensusAnalyser.models.CensusDao;
 import com.indianCensusAnalyser.models.USCensusDataCSV;
 import com.openCsvBuilder.exceptions.CSVBuilderException;
 import com.openCsvBuilder.services.CSVBuilderFactory;
@@ -23,11 +23,11 @@ import java.util.stream.StreamSupport;
 public class ClassAnalyser {
     /* JSON File paths */
     private final String INDIA_CENSUS_JSON_FILE = "src/test/resources/IndiaStateCensus.json";
-    private final String US_STATE_JSON_FILE = "resources/USCensusData.json";
-    private final String INDIA_STATE_CODE_JSON_FILE = "resources/IndiaStateCode.json";
+    private final String US_STATE_JSON_FILE = "src/test/resources/USCensusData.json";
+    private final String INDIA_STATE_CODE_JSON_FILE = "src/test/resources/IndiaStateCode.json";
 
-    private static List<IndiaStateDAO> stateDAOList = null;
-    private static Map<Object, IndiaStateDAO> stateDAOMap = null;
+    private static List<CensusDao> stateDAOList = null;
+    private static Map<Object, CensusDao> stateDAOMap = null;
     private ICSVBuilder csvBuilder;
 
     /**
@@ -56,21 +56,21 @@ public class ClassAnalyser {
                             .csvFileIterator(reader, csvClass);
                     Iterable<IndiaStateCensusCSV> indiaStateCensusCSVIterable = () -> indiaCensusCSVIterator;
                     StreamSupport.stream(indiaStateCensusCSVIterable.spliterator(), false)
-                            .forEach(census -> stateDAOMap.put(census.state, new IndiaStateDAO(census)));
+                            .forEach(census -> stateDAOMap.put(census.state, new CensusDao(census)));
                     break;
                 case "India State Code":
                     Iterator<IndiaStateCodeCSV> indiaStateCodeCSVIterator = csvBuilder
                             .csvFileIterator(reader, csvClass);
                     Iterable<IndiaStateCodeCSV> indiaStateCodeCSVIterable = () -> indiaStateCodeCSVIterator;
                     StreamSupport.stream(indiaStateCodeCSVIterable.spliterator(), false)
-                            .forEach(census -> stateDAOMap.put(census.stateCode, new IndiaStateDAO(census)));
+                            .forEach(census -> stateDAOMap.put(census.stateCode, new CensusDao(census)));
                     break;
                 case "US Census Data":
                     Iterator<USCensusDataCSV> usCensusDataCSVIterator = csvBuilder
                             .csvFileIterator(reader, csvClass);
                     Iterable<USCensusDataCSV> usCensusDataCSVIterable = () -> usCensusDataCSVIterator;
                     StreamSupport.stream(usCensusDataCSVIterable.spliterator(), false)
-                            .forEach(census -> stateDAOMap.put(census.state, new IndiaStateDAO(census)));
+                            .forEach(census -> stateDAOMap.put(census.state, new CensusDao(census)));
                     break;
                 default:
                     throw new CSVAnalyserException("Parameter does not exists !",
@@ -91,16 +91,16 @@ public class ClassAnalyser {
     /**
      * Get IndiaStateCensus file sorted based on any parameter in file
      * Convert to json
-     * @param stateCensusFilePath
+     * @param indiaCensusFilePath
      * @param parameter
      * @return
      * @throws CSVAnalyserException
      * @throws IOException
      */
-    public String getSortedIndiaCensusDataByParameters(String stateCensusFilePath, String parameter)
+    public String getSortedIndiaCensusDataByParameters(String indiaCensusFilePath, String parameter)
             throws CSVAnalyserException, IOException {
-        Comparator<IndiaStateDAO> comparator = this.getComparatorForIndia(parameter);
-        this.loadIndianStateDataList(stateCensusFilePath, "India State Census", IndiaStateCensusCSV.class);
+        Comparator<CensusDao> comparator = this.getComparatorForIndia(parameter);
+        this.loadIndianStateDataList(indiaCensusFilePath, "India State Census", IndiaStateCensusCSV.class);
         stateDAOList = new ArrayList<>(stateDAOMap.values());
         this.isEmpty(stateDAOList);
         stateDAOList.sort(comparator);
@@ -122,7 +122,7 @@ public class ClassAnalyser {
      */
     public String getSortedUSCensusDataByParameters(String usCensusFilePath, String parameter)
             throws CSVAnalyserException, IOException {
-        Comparator<IndiaStateDAO> comparator = this.getComparatorForUS(parameter);
+        Comparator<CensusDao> comparator = this.getComparatorForUS(parameter);
         this.loadIndianStateDataList(usCensusFilePath, "US Census Data", USCensusDataCSV.class);
         stateDAOList = new ArrayList<>(stateDAOMap.values());
         this.isEmpty(stateDAOList);
@@ -144,7 +144,7 @@ public class ClassAnalyser {
     public String getSortedStateCodeDataOnStateCode(String stateCodeDataFilePath)
             throws CSVAnalyserException, IOException {
         this.loadIndianStateDataList(stateCodeDataFilePath, "India State Code", IndiaStateCodeCSV.class);
-        Comparator<IndiaStateDAO> comparator = Comparator.comparing(census -> census.stateCode);
+        Comparator<CensusDao> comparator = Comparator.comparing(census -> census.stateCode);
         stateDAOList = new ArrayList<>(stateDAOMap.values());
         this.isEmpty(stateDAOList);
         stateDAOList.sort(comparator);
@@ -153,12 +153,32 @@ public class ClassAnalyser {
     }
 
     /**
+     * Return state with greatest population from both US and India
+     * @param indiaCensusFilePath
+     * @param usCensusFilePath
+     * @return
+     * @throws CSVAnalyserException
+     * @throws IOException
+     */
+    public String getMostDenseState(String indiaCensusFilePath, String usCensusFilePath)
+            throws CSVAnalyserException, IOException {
+        this.getSortedIndiaCensusDataByParameters(indiaCensusFilePath, "Density");
+        List<CensusDao> indiaList = stateDAOList;
+        stateDAOMap.clear();
+        this.getSortedUSCensusDataByParameters(usCensusFilePath, "Population Density");
+        List<CensusDao> usList = stateDAOList;
+        if ((double)indiaList.get(0).densityPerSqKm > usList.get(0).populationDensity)
+            return new Gson().toJson(indiaList.get(0));
+        return new Gson().toJson(usList.get(0));
+    }
+
+    /**
      * Switch case to create comparator based in parameter for India Census Data
      * @param parameter
      * @return
      * @throws CSVAnalyserException
      */
-    public Comparator<IndiaStateDAO> getComparatorForIndia(String parameter) throws CSVAnalyserException {
+    public Comparator<CensusDao> getComparatorForIndia(String parameter) throws CSVAnalyserException {
         switch (parameter) {
             case "Area":
                 return Comparator.comparing(census -> census.areaInSqKm);
@@ -180,7 +200,7 @@ public class ClassAnalyser {
      * @return
      * @throws CSVAnalyserException
      */
-    public Comparator<IndiaStateDAO> getComparatorForUS(String parameter) throws CSVAnalyserException {
+    public Comparator<CensusDao> getComparatorForUS(String parameter) throws CSVAnalyserException {
         switch (parameter) {
             case "State Id":
                 return Comparator.comparing(census -> census.stateId);
