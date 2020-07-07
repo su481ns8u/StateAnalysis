@@ -2,7 +2,7 @@ package com.indianCensusAnalyser.models;
 
 import com.opencsv.bean.CsvBindByName;
 
-public class CSVStateCensus {
+public class IndiaStateCensusCSV extends Object{
 
     @CsvBindByName(column = "State", required = true)
     public String state;
@@ -18,6 +18,18 @@ public class CSVStateCensus {
 
     public String getState() {
         return state;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public int getDensityPerSqKm() {
+        return densityPerSqKm;
+    }
+
+    public int getAreaInSqKm() {
+        return areaInSqKm;
     }
 
     @Override

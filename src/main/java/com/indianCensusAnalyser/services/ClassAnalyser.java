@@ -1,72 +1,153 @@
 package com.indianCensusAnalyser.services;
 
 import com.google.gson.Gson;
-import com.indianCensusAnalyser.exceptions.CSVAnalyserException;
-import com.indianCensusAnalyser.models.CSVStateCensus;
-import com.openCsvBuilder.exceptions.CSVBuilderException;
-import com.openCsvBuilder.services.CSVBuilderFactory;
-import com.openCsvBuilder.services.ICSVBuilder;
+import com.google.gson.GsonBuilder;
+import indianCensusAnalyser.exceptions.CSVAnalyserException;
+import indianCensusAnalyser.models.CensusDao;
+import indianCensusAnalyser.models.IndiaStateCensusCSV;
+import indianCensusAnalyser.models.IndiaStateCodeCSV;
 
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.StreamSupport;
+import java.io.Writer;
+import java.util.*;
 
 public class ClassAnalyser {
-    private static List csvList = null;
+    /* JSON File paths */
+    private final String INDIA_CENSUS_JSON_FILE = "src/test/resources/IndiaStateCensus.json";
+    private final String INDIA_STATE_CODE_JSON_FILE = "src/test/resources/IndiaStateCode.json";
 
-    public int loadIndianStateData(String csvFilePath, Class csvClass) throws CSVAnalyserException {
-        try {
-            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
-            Iterator<Class> csvIterator = csvBuilder.csvFileIterator(reader, csvClass);
-            return this.getCount(csvIterator);
-        } catch (IOException e) {
-            throw new CSVAnalyserException(e.getMessage(),
-                    CSVAnalyserException.ExceptionType.FILE_PROBLEM);
-        } catch (CSVBuilderException e) {
-            throw new CSVAnalyserException(e.getMessage(), e.type.name());
+    private static List<CensusDao> stateDAOList = null;
+    private static Map<String , CensusDao> stateDAOMap = null;
+
+    public enum Country {
+        INDIA,
+        INDIA_CODE,
+        US
+    }
+
+    /**
+     * Constructor to set parameters
+     */
+    public ClassAnalyser() {
+        stateDAOMap = new HashMap<>();
+    }
+
+    public int loadIndianStateDataList(String csvFilePath, Country country, Class csvClass)
+            throws CSVAnalyserException {
+        stateDAOMap = new CensusAdapterFactory().getCensusData(country, csvFilePath);
+        return stateDAOMap.size();
+    }
+
+    /**
+     * Get IndiaStateCensus file sorted based on any parameter in file
+     * Convert to json
+     *
+     * @param stateCensusFilePath
+     * @param parameter
+     * @return
+     * @throws CSVAnalyserException
+     * @throws IOException
+     */
+    public String getSorted(String stateCensusFilePath, String parameter)
+            throws CSVAnalyserException, IOException {
+        Comparator<CensusDao> comparator = this.getComparator(parameter);
+        this.loadIndianStateDataList(stateCensusFilePath, Country.INDIA, IndiaStateCensusCSV.class);
+        stateDAOList = new ArrayList<>(stateDAOMap.values());
+        this.isEmpty(stateDAOList);
+        stateDAOList.sort(comparator);
+        if (!parameter.equals("State")) {
+            Collections.reverse(stateDAOList);
+        }
+        this.writeIntoJson(INDIA_CENSUS_JSON_FILE, stateDAOList);
+        return new Gson().toJson(stateDAOList);
+    }
+
+    /**
+     * get IndiaStateCode file sorted by state code and convert to json
+     *
+     * @param stateCodeDataFilePath
+     * @return
+     * @throws CSVAnalyserException
+     * @throws IOException
+     */
+    public String getSortedStateCodeDataOnStateCode(String stateCodeDataFilePath)
+            throws CSVAnalyserException, IOException {
+        this.loadIndianStateDataList(stateCodeDataFilePath, Country.INDIA, IndiaStateCodeCSV.class);
+        Comparator<CensusDao> comparator = Comparator.comparing(census -> census.stateCode);
+        stateDAOList = new ArrayList<>(stateDAOMap.values());
+        this.isEmpty(stateDAOList);
+        stateDAOList.sort(comparator);
+        this.writeIntoJson(INDIA_STATE_CODE_JSON_FILE, stateDAOList);
+        return new Gson().toJson(stateDAOList);
+    }
+
+    /**
+     * Switch case to create comparator based in parameter for India Census Data
+     *
+     * @param parameter
+     * @return
+     * @throws CSVAnalyserException
+     */
+    public Comparator<CensusDao> getComparator(String parameter) throws CSVAnalyserException {
+        switch (parameter) {
+            case "Area":
+                return Comparator.comparing(census -> census.totalArea);
+            case "Density":
+                return Comparator.comparing(census -> census.populationDensity);
+            case "Population":
+                return Comparator.comparing(census -> census.population);
+            case "State":
+                return Comparator.comparing(census -> census.state);
+            default:
+                throw new CSVAnalyserException("Parameter does not exists !",
+                        CSVAnalyserException.ExceptionType.INVALID_PARAMETER);
         }
     }
 
-    private <E> int getCount(Iterator<E> csvIterator) throws CSVAnalyserException {
-        Iterable<E> iterable = () -> csvIterator;
-        try {
-            return (int) StreamSupport.stream(iterable.spliterator(), false).count();
-        } catch (RuntimeException e) {
-            throw new CSVAnalyserException(e.getMessage(), CSVAnalyserException.ExceptionType.WRONG_DELIMITER);
-        }
-    }
-
-    public int loadIndianStateDataList(String csvFilePath, Class csvClass) throws CSVAnalyserException {
-        try {
-            ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
-            csvList = csvBuilder.csvFileList(reader, csvClass);
-            return csvList.size();
-        } catch (IOException e) {
-            throw new CSVAnalyserException(e.getMessage(),
-                    CSVAnalyserException.ExceptionType.FILE_PROBLEM);
-        } catch (CSVBuilderException e) {
-            throw new CSVAnalyserException(e.getMessage(), e.type.name());
-        }
-    }
-
-    public String getSortedCensusData(String stateCensusData, Comparator<CSVStateCensus> comparator) throws CSVAnalyserException {
-        this.loadIndianStateDataList(stateCensusData, CSVStateCensus.class);
-        this.isEmpty(csvList);
-        csvList.sort(comparator);
-        String sortedJsonList = new Gson().toJson(csvList);
-        return sortedJsonList;
-    }
-
+    /**
+     * Function to check if list empty or not
+     *
+     * @param csvList
+     * @throws CSVAnalyserException
+     */
     public void isEmpty(List csvList) throws CSVAnalyserException {
-        if (csvList.size() == 0){
+        if (csvList.size() == 0) {
             throw new CSVAnalyserException("No data exists!", CSVAnalyserException.ExceptionType.EMPTY_CSV);
         }
+    }
+
+    /**
+     * Return state with greatest population from both US and India
+     *
+     * @param indiaCensusFilePath
+     * @param usCensusFilePath
+     * @return
+     * @throws CSVAnalyserException
+     * @throws IOException
+     */
+    public String getMostDenseState(String indiaCensusFilePath, String usCensusFilePath)
+            throws CSVAnalyserException, IOException {
+        this.getSorted(indiaCensusFilePath, "Density");
+        List<CensusDao> indiaList = stateDAOList;
+        stateDAOMap.clear();
+        this.getSorted(usCensusFilePath, "Population Density");
+        List<CensusDao> usList = stateDAOList;
+        if (indiaList.get(0).density > usList.get(0).density)
+            return new Gson().toJson(indiaList.get(0));
+        return new Gson().toJson(usList.get(0));
+    }
+
+    /**
+     * Function to write list to json
+     *
+     * @param fileName
+     * @param listToWrite
+     * @throws IOException
+     */
+    public void writeIntoJson(String fileName, List listToWrite) throws IOException {
+        Writer writer = new FileWriter(fileName);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        gson.toJson(listToWrite, writer);
     }
 }

@@ -1,9 +1,8 @@
 package com.indianCensusAnalyser.models;
 
 import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvBindByPosition;
 
-public class CSVStateCode {
+public class IndiaStateCodeCSV {
     @CsvBindByName(column = "SrNo", required = true)
     public String srNo;
 
@@ -15,6 +14,10 @@ public class CSVStateCode {
 
     @CsvBindByName(column = "StateCode", required = true)
     public String stateCode;
+
+    public String getStateCode() {
+        return stateCode;
+    }
 
     @Override
     public String toString() {
