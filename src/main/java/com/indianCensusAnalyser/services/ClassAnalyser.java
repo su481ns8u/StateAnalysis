@@ -2,10 +2,11 @@ package com.indianCensusAnalyser.services;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import indianCensusAnalyser.exceptions.CSVAnalyserException;
-import indianCensusAnalyser.models.CensusDao;
-import indianCensusAnalyser.models.IndiaStateCensusCSV;
-import indianCensusAnalyser.models.IndiaStateCodeCSV;
+import com.indianCensusAnalyser.models.CensusDao;
+import com.indianCensusAnalyser.exceptions.CSVAnalyserException;
+import com.indianCensusAnalyser.models.CensusDao;
+import com.indianCensusAnalyser.models.IndiaStateCensusCSV;
+import com.indianCensusAnalyser.models.IndiaStateCodeCSV;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class ClassAnalyser {
     private final String INDIA_STATE_CODE_JSON_FILE = "src/test/resources/IndiaStateCode.json";
 
     private static List<CensusDao> stateDAOList = null;
-    private static Map<String , CensusDao> stateDAOMap = null;
+    private static Map<String, CensusDao> stateDAOMap = null;
 
     public enum Country {
         INDIA,

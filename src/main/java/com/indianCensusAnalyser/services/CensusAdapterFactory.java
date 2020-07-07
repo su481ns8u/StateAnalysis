@@ -1,7 +1,8 @@
 package com.indianCensusAnalyser.services;
 
-import indianCensusAnalyser.exceptions.CSVAnalyserException;
-import indianCensusAnalyser.models.CensusDao;
+import com.indianCensusAnalyser.models.CensusDao;
+import com.indianCensusAnalyser.exceptions.CSVAnalyserException;
+import com.indianCensusAnalyser.models.CensusDao;
 
 import java.util.Map;
 
