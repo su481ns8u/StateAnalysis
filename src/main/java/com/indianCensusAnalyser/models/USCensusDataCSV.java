@@ -9,37 +9,37 @@ public class USCensusDataCSV {
     @CsvBindByName(column = "State", required = true)
     public String state;
 
-    @CsvBindByName(column = "Population", required = true)
-    public double population;
-
-    @CsvBindByName(column = "Housing units", required = true)
-    public double housingUnits;
-
     @CsvBindByName(column = "Total area", required = true)
     public double totalArea;
+
+    @CsvBindByName(column = "Population", required = true)
+    public int population;
 
     @CsvBindByName(column = "Population Density", required = true)
     public double populationDensity;
 
-    @CsvBindByName(column = "Housing Density", required = true)
-    public double housingDensity;
+    @CsvBindByName(column = "Housing units", required = true)
+    public double housingUnits;
 
     @CsvBindByName(column = "Water area", required = true)
     public double waterArea;
 
-    @CsvBindByName(column = "Land area", required = true)
-    public double landArea;
+    public USCensusDataCSV() {
+    }
 
-    @Override
-    public String toString() {
-        return "USCensusDataCSV{" +
-                "stateId='" + stateId + '\'' +
-                ", state='" + state + '\'' +
-                ", population=" + population +
-                ", housingUnits=" + housingUnits +
-                ", totalArea=" + totalArea +
-                ", density=" + populationDensity +
-                ", housingDensity=" + housingDensity +
-                '}';
+    public USCensusDataCSV(String stateId,
+                           String state,
+                           double totalArea,
+                           int population,
+                           double populationDensity,
+                           double housingUnits,
+                           double waterArea) {
+        this.stateId = stateId;
+        this.state = state;
+        this.totalArea = totalArea;
+        this.population = population;
+        this.populationDensity = populationDensity;
+        this.housingUnits = housingUnits;
+        this.waterArea = waterArea;
     }
 }

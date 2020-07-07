@@ -3,29 +3,17 @@ package com.indianCensusAnalyser.models;
 import com.opencsv.bean.CsvBindByName;
 
 public class IndiaStateCodeCSV {
-    @CsvBindByName(column = "SrNo", required = true)
-    public String srNo;
-
     @CsvBindByName(column = "State Name", required = true)
     public String stateName;
-
-    @CsvBindByName(column = "TIN", required = true)
-    public String tin;
 
     @CsvBindByName(column = "StateCode", required = true)
     public String stateCode;
 
-    public String getStateCode() {
-        return stateCode;
+    public IndiaStateCodeCSV() {
     }
 
-    @Override
-    public String toString() {
-        return "IndiaStateCodeCSV{" +
-                "srNo='" + srNo + '\'' +
-                ", stateName=" + stateName +
-                ", tin=" + tin +
-                ", stateCode=" + stateCode +
-                '}';
+    public IndiaStateCodeCSV(String stateName, String stateCode) {
+        this.stateName = stateName;
+        this.stateCode = stateCode;
     }
 }
