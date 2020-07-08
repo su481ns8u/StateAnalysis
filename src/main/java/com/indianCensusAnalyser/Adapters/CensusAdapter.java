@@ -46,8 +46,7 @@ public abstract class CensusAdapter {
         } catch (RuntimeException e) {
             throw new CSVAnalyserException("Invalid header or delimiter",
                     CSVAnalyserException.ExceptionType.INVALID_HEADER_AND_DELIMITER);
-        }
-        catch (CSVBuilderException e) {
+        } catch (CSVBuilderException e) {
             throw new CSVAnalyserException(e.getMessage(), e.type.name());
         }
     }

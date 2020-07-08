@@ -18,11 +18,11 @@ public class ClassAnalyser {
     private static final String INDIA_STATE_CODE_CSV_FILE_PATH = "./src/test/resources/IndiaStateCode.csv";
 
     public enum Country {
-        INDIA, INDIA_CODE, US
+        INDIA, US, PAK
     }
 
     public enum SortParameter {
-        STATE, STATE_CODE, POPULATION, DENSITY, AREA
+        STATE, STATE_CODE, POPULATION, DENSITY, SOME_WRONG_PARAMETER, AREA
     }
 
     private Country country;
@@ -36,17 +36,17 @@ public class ClassAnalyser {
         return censusDAOMap;
     }
 
-    public void writeCSVToJSON(String fileName, List listToWrite) {
+    public void writeCSVToJSON(String fileName, List listToWrite) throws CSVAnalyserException {
         try (Writer writer = new FileWriter(fileName)) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(listToWrite, writer);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new CSVAnalyserException("Wrong File Path", CSVAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }
     }
 
     public String sortAndWrite(SortParameter parameter, String filePath) throws CSVAnalyserException {
-        if (censusDAOList == null || censusDAOMap.size() == 0) {
+        if (censusDAOMap == null || censusDAOMap.size() == 0) {
             throw new CSVAnalyserException("empty file", CSVAnalyserException.ExceptionType.EMPTY_FILE);
         }
         Comparator<CensusDAO> censusComparator = this.getComparator(parameter);
@@ -80,7 +80,7 @@ public class ClassAnalyser {
     }
 
     public String getMostDenseState(String indiaCensusFilePath, String usCensusFilePath) throws CSVAnalyserException {
-        this.loadCensusData(Country.INDIA,indiaCensusFilePath,INDIA_STATE_CODE_CSV_FILE_PATH);
+        this.loadCensusData(Country.INDIA, indiaCensusFilePath, INDIA_STATE_CODE_CSV_FILE_PATH);
         String indiaJson = this.sortAndWrite
                 (SortParameter.DENSITY, "./src/test/resources/IndiaCensusDataDensity.json");
         IndiaStateCensusCSV[] indiaCensusCSV = new Gson().fromJson(indiaJson, IndiaStateCensusCSV[].class);

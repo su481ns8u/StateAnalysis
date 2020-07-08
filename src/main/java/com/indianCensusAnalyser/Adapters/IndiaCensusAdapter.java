@@ -28,7 +28,7 @@ public class IndiaCensusAdapter extends CensusAdapter {
     }
 
     public int loadCensusData(Map<String, CensusDAO> indiaCensusMap, String csvFilePath) throws CSVAnalyserException {
-        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));){
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
             Iterator<IndiaStateCodeCSV> censusCSVIterator = csvBuilder
                     .csvFileIterator(reader, IndiaStateCodeCSV.class);

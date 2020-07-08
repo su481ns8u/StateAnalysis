@@ -2,7 +2,6 @@ package com.indianCensusAnalyser.dao;
 
 
 import com.indianCensusAnalyser.models.IndiaStateCensusCSV;
-import com.indianCensusAnalyser.models.IndiaStateCodeCSV;
 import com.indianCensusAnalyser.models.USCensusDataCSV;
 import com.indianCensusAnalyser.services.ClassAnalyser;
 
@@ -11,7 +10,6 @@ public class CensusDAO {
     public double totalArea;
     public String state;
     public int population;
-    public String stateName;
     public String stateCode;
     public double totalAreaUS;
     public double housingUnits;
@@ -22,11 +20,6 @@ public class CensusDAO {
         this.totalArea = indiaCensusCSV.areaInSqKm;
         this.populationDensity = indiaCensusCSV.densityPerSqKm;
         this.population = indiaCensusCSV.population;
-    }
-
-    public CensusDAO(IndiaStateCodeCSV indiaStateCSV) {
-        stateName = indiaStateCSV.stateName;
-        stateCode = indiaStateCSV.stateCode;
     }
 
     public CensusDAO(USCensusDataCSV censusCSV) {
